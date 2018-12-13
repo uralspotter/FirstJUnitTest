@@ -39,6 +39,9 @@ public class FirstTest {
 
     @Test
     public void testWikiSearch() {
+
+        String search_query = "Java";
+
         waitForElementAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                 "Cannot find the search field"
@@ -54,18 +57,24 @@ public class FirstTest {
 
         waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
-                "Java",
+                search_query,
                 "Cannot find input search",
                 5
         );
 
         List<WebElement> result_list = waitForElementsPresent(
-                By.id("org.wikipedia:id/page_list_item_container"),
+                By.id("org.wikipedia:id/page_list_item_title"),
                 "List is empty",
                 15
         );
 
         Assert.assertTrue("In the results list less than two elements", result_list.size() > 1);
+        for(int i = 0; i < result_list.size(); i++) {
+            Assert.assertTrue(
+                    "Not all of the results contain " + search_query,
+                    result_list.get(i).getAttribute("text").toLowerCase().contains(search_query.toLowerCase())
+            );
+        }
 
         waitForElementAndClear(
                 By.id("org.wikipedia:id/search_src_text"),
