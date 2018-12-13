@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
 
@@ -49,7 +50,34 @@ public class FirstTest {
         );
 
         String expected_title = "Search…";
-        checkInputSearchTitle(input_search_field, "We see unexpected title", expected_title);
+        checkSearch(input_search_field, "We see unexpected title", expected_title);
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Java",
+                "Cannot find input search",
+                5
+        );
+
+        List<WebElement> result_list = waitForElementsPresent(
+                By.id("org.wikipedia:id/page_list_item_container"),
+                "List is empty",
+                15
+        );
+
+        Assert.assertTrue("In the results list less than two elements", result_list.size() > 1);
+
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find input search",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.id("org.wikipedia:id/page_list_item_container"),
+                "List not empty",
+                15
+        );
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
@@ -57,6 +85,14 @@ public class FirstTest {
         wait.withMessage(error_message + "\n");
         return wait.until(
                 ExpectedConditions.presenceOfElementLocated(by)
+        );
+    }
+
+    private List<WebElement> waitForElementsPresent(By by, String error_message, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + "\n");
+        return wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(by)
         );
     }
 
@@ -102,7 +138,7 @@ public class FirstTest {
         return element;
     }
 
-    private void checkInputSearchTitle(WebElement input_title, String error_message, String expected_title) {
+    private void checkSearch(WebElement input_title, String error_message, String expected_title) {
         String title_search_field = input_title.getAttribute("text");
         Assert.assertEquals(
                 error_message,
