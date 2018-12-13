@@ -48,12 +48,8 @@ public class FirstTest {
                 "Cannot find input search"
         );
 
-        String title_search_field = input_search_field.getAttribute("text");
-        Assert.assertEquals(
-                "We see unexpected title",
-                "Search…",
-                title_search_field
-        );
+        String expected_title = "Search…";
+        checkInputSearchTitle(input_search_field, "We see unexpected title", expected_title);
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
@@ -104,5 +100,14 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.clear();
         return element;
+    }
+
+    private void checkInputSearchTitle(WebElement input_title, String error_message, String expected_title) {
+        String title_search_field = input_title.getAttribute("text");
+        Assert.assertEquals(
+                error_message,
+                expected_title,
+                title_search_field
+        );
     }
 }
