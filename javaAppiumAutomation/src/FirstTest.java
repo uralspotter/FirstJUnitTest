@@ -139,6 +139,33 @@ public class FirstTest {
         Assert.assertEquals(error_titles_no_equals, java_article_title, article_title);
     }
 
+    @Test
+    public void testGetTitleNow() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find element Search",
+                5);
+
+        String search_line = "Java";
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                search_line,
+                "Cannot find element Search",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Cannot find 'Object-oriented programming language' topic searching by " + search_line,
+                15);
+
+        assertElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "Cannot find title or title no present",
+                "Object-oriented programming language"
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -362,6 +389,12 @@ public class FirstTest {
                 "Cannot close article, cannot find X link",
                 5
         );
+    }
 
+    private void assertElementPresent(By by, String error_message, String article_title) {
+        WebElement element = driver.findElement(by);
+        String title = element.getAttribute("text");
+        System.out.println(title);
+        Assert.assertEquals(error_message, article_title, title);
     }
 }
