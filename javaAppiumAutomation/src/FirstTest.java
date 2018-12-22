@@ -33,11 +33,11 @@ public class FirstTest {
         capabilities.setCapability("app", "C:\\Users\\ural\\Desktop\\ТУСУР\\software testing\\Автоматизация моб тест\\javaAppiumAutomation\\apks\\org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub/"), capabilities);
+        driver.rotate(ScreenOrientation.PORTRAIT);
     }
 
     @After
     public void tearDown() {
-        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
 
@@ -97,7 +97,7 @@ public class FirstTest {
     public void testArticleList() {
 
         By java_article_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']");
-        By java_article_title_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Java (programming language)']");
+        By java_article_title_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']");
         By appium_article_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Appium']");
         By appium_into_folder_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Appium']");
 
@@ -113,12 +113,14 @@ public class FirstTest {
 
         waitForElementAndClick(
                 By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
-                "Cannot find navigation button to My list"
+                "Cannot find navigation button to My list",
+                15
         );
 
         waitForElementAndClick(
                 By.xpath("//*[@resource-id='org.wikipedia:id/item_title'][@text='" + folder_name + "']"),
-                "Cannot find the article folder"
+                "Cannot find the article folder",
+                15
         );
 
         swipeElementToLeft(
@@ -394,9 +396,11 @@ public class FirstTest {
     }
 
     private void assertElementPresent(By by, String error_message, String article_title) {
-        WebElement element = driver.findElement(by);
-        String title = element.getAttribute("text");
-        System.out.println(title);
+        List<WebElement> element = driver.findElements(by);
+        if (element.size() == 0) {
+            throw new AssertionError(error_message);
+        }
+        String title = element.get(0).getAttribute("text");
         Assert.assertEquals(error_message, article_title, title);
     }
 }
