@@ -97,7 +97,7 @@ public class FirstTest {
     public void testArticleList() {
 
         By java_article_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']");
-        By java_article_title_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']");
+        By java_article_title_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Object-oriented programming language']");
         By appium_article_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Appium']");
         By appium_into_folder_xpath = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Appium']");
 
