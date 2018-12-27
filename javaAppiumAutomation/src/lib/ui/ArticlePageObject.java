@@ -22,7 +22,7 @@ public class ArticlePageObject extends MainPageObject {
         MY_LIST_NAME_TPL = "//*[@resource-id='org.wikipedia:id/item_title'][@text='{NAME_OF_FOLDER}']";
 
     /* TEMPLATE METHODS */
-    public String getMyListFolderName(String substring) {
+    public static String getMyListFolderName(String substring) {
         return MY_LIST_NAME_TPL.replace("{NAME_OF_FOLDER}", substring);
     }
     /* TEMPLATE METHODS */

@@ -10,6 +10,7 @@ public class SearchPageObject extends MainPageObject {
         SEARCH_INPUT = "//*[contains(@text,'Search…')]",
         SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
         SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
+        SEARCH_RESULT_BY_NAME_AND_DESC_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{ARTICLE_NAME}']/../*[@resource-id='org.wikipedia:id/page_list_item_description'][@text='{ARTICLE_DESC}']",
         SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
         SEARCH_EMPTY_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_empty_view']";
 
@@ -20,6 +21,10 @@ public class SearchPageObject extends MainPageObject {
     /* TEMPLATE METHODS */
     private static String getResultSearchElement(String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getResultByArticleNameAndDesc(String title, String description) {
+        return SEARCH_RESULT_BY_NAME_AND_DESC_TPL.replace("{ARTICLE_NAME}", title).replace("{ARTICLE_DESC}", description);
     }
     /* TEMPLATE METHODS */
 
@@ -47,6 +52,11 @@ public class SearchPageObject extends MainPageObject {
     public void waitForSearchResult(String substring) {
         String search_result_xpath = getResultSearchElement(substring);
         this.waitForElementPresent(By.xpath(search_result_xpath), "Cannot find search result with substring " + substring);
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        String search_result_xpath = getResultByArticleNameAndDesc(title, description);
+        this.waitForElementPresent(By.xpath(search_result_xpath), "Cannot find thw article with title '" + title + "' and description '" + description + "'");
     }
 
     public void clickByArticleWithSubstring(String substring) {
