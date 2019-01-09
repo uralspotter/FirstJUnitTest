@@ -50,6 +50,18 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.typeSearchLine(search_line);
         SearchPageObject.waitEmptyForResultsLabel();
         SearchPageObject.assertThereIsNoResultSearch();
+    }
 
+    @Test
+    public void testSearchAmountMoreThree() {
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        int amount_of_search_result = SearchPageObject.getAmountOfFoundArticles();
+        assertTrue(
+                "We found too few results!",
+                amount_of_search_result >= 3
+        );
     }
 }
